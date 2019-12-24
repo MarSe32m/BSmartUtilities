@@ -1,9 +1,8 @@
 //
 //  AnalogStick.swift
-//  Dungeoneering
 //
-//  Created by Sebastian Toivonen on 16.4.2015.
-//  Copyright (c) 2015 BSmart. All rights reserved.
+//  Created by Sebastian Toivonen on 16.4.2016.
+//  Copyright (c) 2016 BSmart. All rights reserved.
 //
 
 import SpriteKit
