@@ -15,7 +15,7 @@ enum BitStreamError: Error {
 struct FloatCompressor {
     var minValue: Float
     var maxValue: Float
-    var bits: Int // How many bits we want
+    var bits: Int
     private var maxBitValue: Double
 
     init(minValue: Float, maxValue: Float, bits: Int) {
