@@ -23,9 +23,8 @@
 // SOFTWARE.
 //
 
-import Foundation
-import SpriteKit
 #if canImport(SpriteKit)
+import SpriteKit
 extension SKAttributeValue {
 
     /**

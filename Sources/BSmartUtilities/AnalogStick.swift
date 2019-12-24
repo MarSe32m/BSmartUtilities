@@ -4,7 +4,7 @@
 //  Created by Sebastian Toivonen on 16.4.2016.
 //  Copyright (c) 2016 BSmart. All rights reserved.
 //
-
+#if canImport(SpriteKit)
 import SpriteKit
 
 @objc protocol AnalogStickProtocol {
@@ -169,3 +169,4 @@ final class AnalogStick: SKNode {
         reset()
     }
 }
+#endif

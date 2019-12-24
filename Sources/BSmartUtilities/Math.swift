@@ -38,12 +38,8 @@ public func smoothMin(a: Float, b: Float, k: Float) -> Float {
     return min(a, b) - h*h*h*h*1/6.0
 }
 
-public func smoothMin(a: CGFloat, b: CGFloat, k: CGFloat) -> CGFloat {
-    if k == 0 {
-        return min(a, b)
-    }
-    let h = max(k - abs(a - b), 0) / k
-    return min(a, b) - h*h*h*h*1/6.0
+func exponentialSmoothingFunction(t: Float) -> Float {
+    return (t == 1.0) ? t : 1.0 - pow(Float(M_E), -6.0 * t)
 }
 
 public func invSqrt(x: CGFloat) -> CGFloat {
@@ -55,15 +51,6 @@ public func invSqrt(x: CGFloat) -> CGFloat {
     return y
 }
 
-
-
-public func sign(value: CGFloat) -> Int {
-    return value >= 0 ? 1 : -1
-}
-
-func exponentialSmoothingFunction(t: Float) -> Float {
-    return (t == 1.0) ? t : 1.0 - pow(Float(M_E), -6.0 * t)
-}
 
 public postfix func ++(a: inout Int) -> Int {
     a += 1
@@ -83,6 +70,20 @@ public postfix func ++(a: inout UInt64) -> UInt64 {
 public prefix func ++(a: inout UInt64) -> UInt64 {
     a += 1
     return a
+}
+
+
+#if canImport(CoreGraphics)
+public func sign(value: CGFloat) -> Int {
+    return value >= 0 ? 1 : -1
+}
+
+public func smoothMin(a: CGFloat, b: CGFloat, k: CGFloat) -> CGFloat {
+    if k == 0 {
+        return min(a, b)
+    }
+    let h = max(k - abs(a - b), 0) / k
+    return min(a, b) - h*h*h*h*1/6.0
 }
 
 /// Calculates the collision point of two moving (point) objects
@@ -223,3 +224,4 @@ public func degreesToRadians(degrees: CGFloat) -> CGFloat {
 public func radiansToDegrees(radians: CGFloat) -> CGFloat {
     return radians * (180 / CGFloat.pi)
 }
+#endif

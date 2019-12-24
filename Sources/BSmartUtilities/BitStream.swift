@@ -4,8 +4,6 @@ Utilities for compact serialization of data structures for network transmission.
 */
 
 import Foundation
-import simd
-import CoreGraphics
 
 enum BitStreamError: Error {
     case tooShort
@@ -31,20 +29,6 @@ struct FloatCompressor {
         let bitPattern = UInt32(clampedRatio * maxBitValue)
         string.appendUInt32(bitPattern, numberOfBits: bits)
     }
-
-    func write(_ value: CGFloat, to string: inout WritableBitStream) {
-        write(Float(value), to: &string)
-    }
-    
-    func write(_ value: CGPoint, to string: inout WritableBitStream) {
-        write(value.x, to: &string)
-        write(value.y, to: &string)
-    }
-    
-    func write(_ value: CGVector, to string: inout WritableBitStream) {
-        write(value.dx, to: &string)
-        write(value.dy, to: &string)
-    }
     
     func write(_ value: SIMD2<Float>, to string: inout WritableBitStream) {
         write(value.x, to: &string)
@@ -62,18 +46,6 @@ struct FloatCompressor {
 
         let ratio = Float(Double(bitPattern) / maxBitValue)
         return  ratio * (maxValue - minValue) + minValue
-    }
-
-    func readCG(from string: inout ReadableBitStream) throws -> CGFloat {
-        return CGFloat(try read(from: &string))
-    }
-    
-    func readPoint(from string: inout ReadableBitStream) throws -> CGPoint {
-        return CGPoint(x: try readCG(from: &string), y: try readCG(from: &string))
-    }
-    
-    func readVector(from string: inout ReadableBitStream) throws -> CGVector {
-        return CGVector(dx: try readCG(from: &string), dy: try readCG(from: &string))
     }
     
     func readFloat2(from string: inout ReadableBitStream) throws -> SIMD2<Float> {
@@ -137,10 +109,6 @@ struct WritableBitStream {
         appendUInt32(value.rawValue, numberOfBits: type(of: value).bits)
     }
 */
-    mutating func appendCGFloat(_ value: CGFloat) {
-        appendFloat(Float(value))
-    }
-    
     mutating func appendFloat(_ value: Float) {
         appendUInt32(value.bitPattern)
     }
@@ -221,10 +189,6 @@ struct ReadableBitStream {
         }
         return (readBit() > 0) ? true : false
     }
-
-    mutating func readCGFloat() throws -> CGFloat {
-        return CGFloat(try readFloat())
-    }
     
     mutating func readFloat() throws -> Float {
         var result: Float = 0.0
@@ -288,3 +252,47 @@ struct ReadableBitStream {
         return (bytes[byteIndex] >> bitShift) & 1
     }
 }
+
+#if canImport(CoreGraphics)
+import CoreGraphics
+
+extension FloatCompressor {
+    func write(_ value: CGFloat, to string: inout WritableBitStream) {
+        write(Float(value), to: &string)
+    }
+    
+    func write(_ value: CGPoint, to string: inout WritableBitStream) {
+        write(value.x, to: &string)
+        write(value.y, to: &string)
+    }
+    
+    func write(_ value: CGVector, to string: inout WritableBitStream) {
+        write(value.dx, to: &string)
+        write(value.dy, to: &string)
+    }
+    
+    func readCG(from string: inout ReadableBitStream) throws -> CGFloat {
+        return CGFloat(try read(from: &string))
+    }
+    
+    func readPoint(from string: inout ReadableBitStream) throws -> CGPoint {
+        return CGPoint(x: try readCG(from: &string), y: try readCG(from: &string))
+    }
+    
+    func readVector(from string: inout ReadableBitStream) throws -> CGVector {
+        return CGVector(dx: try readCG(from: &string), dy: try readCG(from: &string))
+    }
+}
+
+extension WritableBitStream {
+    mutating func appendCGFloat(_ value: CGFloat) {
+        appendFloat(Float(value))
+    }
+}
+
+extension ReadableBitStream {
+    mutating func readCGFloat() throws -> CGFloat {
+        return CGFloat(try readFloat())
+    }
+}
+#endif

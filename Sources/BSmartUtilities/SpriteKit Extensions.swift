@@ -4,10 +4,9 @@
 //  Created by Sebastian on 14.8.2017.
 //  Copyright © 2017 Sebastian Toivonen. All rights reserved.
 //
-
-import Foundation
+#if canImport(SpriteKit)
+#if canImport(GameplayKit)
 import SpriteKit
-import simd
 import GameplayKit
 
 extension SKNode {
@@ -518,3 +517,5 @@ class Camera: SKCameraNode {
         
     }
 }
+#endif
+#endif

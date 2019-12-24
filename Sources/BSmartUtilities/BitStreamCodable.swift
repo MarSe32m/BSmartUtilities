@@ -6,7 +6,6 @@ Protocols for defining types that can encode to bit streams.
 */
 
 import Foundation
-import CoreGraphics
 
 protocol BitStreamEncodable {
     func encode(to bitStream: inout WritableBitStream) -> Bool
@@ -85,23 +84,6 @@ extension Float: BitStreamCodable {
     }
 }
 
-extension CGFloat: BitStreamCodable {
-    init?(from bitStream: inout ReadableBitStream) {
-        do {
-            self = try bitStream.readCGFloat()
-        } catch let error {
-            print("Error decoding CGFloat.")
-            print(error)
-            return nil
-        }
-    }
-    
-    func encode(to bitStream: inout WritableBitStream) -> Bool {
-        bitStream.appendCGFloat(self)
-        return true
-    }
-}
-
 extension String: BitStreamCodable {
     init?(from bitStream: inout ReadableBitStream) {
         do {
@@ -127,6 +109,27 @@ extension String: BitStreamCodable {
         }
     }
 }
+
+#if canImport(CoreGraphics)
+import CoreGraphics
+extension CGFloat: BitStreamCodable {
+    init?(from bitStream: inout ReadableBitStream) {
+        do {
+            self = try bitStream.readCGFloat()
+        } catch let error {
+            print("Error decoding CGFloat.")
+            print(error)
+            return nil
+        }
+    }
+    
+    func encode(to bitStream: inout WritableBitStream) -> Bool {
+        bitStream.appendCGFloat(self)
+        return true
+    }
+}
+
+
 
 extension CGPoint: BitStreamCodable {
     
@@ -166,3 +169,4 @@ extension CGVector: BitStreamCodable {
     }
     
 }
+#endif

@@ -6,7 +6,7 @@
 //  Copyright © 2018 Sebastian Toivonen. All rights reserved.
 //
 
-import Foundation
+#if canImport(SpriteKit)
 import SpriteKit
 
 protocol ButtonNodeResponderType: class {
@@ -235,3 +235,4 @@ class ButtonNode: SKSpriteNode {
         }
     }
 }
+#endif

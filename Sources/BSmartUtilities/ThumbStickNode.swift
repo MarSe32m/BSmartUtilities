@@ -1,3 +1,4 @@
+#if canImport(SpriteKit)
 import SpriteKit
 
 /// Relay control events though `ThumbStickNodeDelegate`.
@@ -135,3 +136,4 @@ class ThumbStickNode: SKSpriteNode {
         delegate?.thumbStickNode(thumbStickNode: self, didUpdateXValue: 0, yValue: 0)
     }
 }
+#endif
