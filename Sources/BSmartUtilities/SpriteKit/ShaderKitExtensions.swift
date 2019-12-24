@@ -25,7 +25,7 @@
 
 import Foundation
 import SpriteKit
-
+#if canImport(SpriteKit)
 extension SKAttributeValue {
 
     /**
@@ -118,3 +118,4 @@ extension SKUniform {
         self.init(name: name, vectorFloat2: point)
     }
 }
+#endif
